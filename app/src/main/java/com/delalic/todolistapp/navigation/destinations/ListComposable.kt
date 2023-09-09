@@ -8,7 +8,7 @@ import com.delalic.todolistapp.ui.screens.list.ListScreen
 import com.delalic.todolistapp.util.Constants
 
 fun NavGraphBuilder.listComposable(
-    navigateToTaskComposable: (Int) -> Unit
+    navigateToTaskComposable: (taskId: Int) -> Unit
 ) {
     composable(
         route = Constants.LIST_SCREEN,

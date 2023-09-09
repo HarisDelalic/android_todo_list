@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.delalic.todolistapp.R
 
 @Composable
-fun ListScreen(navigateToTaskComposable: (Int) -> Unit) {
+fun ListScreen(navigateToTaskComposable: (taskId: Int) -> Unit) {
     Scaffold(
         topBar = { DefaultListAppBar() },
         content = {},
@@ -25,7 +25,7 @@ fun ListScreen(navigateToTaskComposable: (Int) -> Unit) {
 }
 
 @Composable
-fun FAB(navigateToTaskComposable: (Int) -> Unit) {
+fun FAB(navigateToTaskComposable: (taskId: Int) -> Unit) {
     FloatingActionButton(onClick = { navigateToTaskComposable(-1) }) {
         Icon(imageVector = Icons.Filled.Add, contentDescription = stringResource(id = R.string.add_task_button_text), tint = Color.White)
     }

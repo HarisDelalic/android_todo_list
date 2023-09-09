@@ -8,24 +8,25 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.delalic.todolistapp.navigation.SetupNavigation
 import com.delalic.todolistapp.ui.theme.ToDoListAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private lateinit var navController: NavHostController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ToDoListAppTheme {
 
-                Greeting("dela")
+                navController = rememberNavController()
+                SetupNavigation(navController = navController)
 
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = name)
 }

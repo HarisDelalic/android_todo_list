@@ -15,7 +15,7 @@ import com.delalic.todolistapp.R
 @Composable
 fun ListScreen(navigateToTaskComposable: (taskId: Int) -> Unit) {
     Scaffold(
-        topBar = { DefaultListAppBar() },
+        topBar = { ListAppBar() },
         content = {},
         floatingActionButton = {
             FAB(navigateToTaskComposable = navigateToTaskComposable)

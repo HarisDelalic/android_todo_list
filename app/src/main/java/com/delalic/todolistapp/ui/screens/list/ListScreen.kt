@@ -3,6 +3,7 @@ package com.delalic.todolistapp.ui.screens.list
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import com.delalic.todolistapp.R
 @Composable
 fun ListScreen(navigateToTaskComposable: (Int) -> Unit) {
     Scaffold(
+        topBar = { DefaultListAppBar() },
         content = {},
         floatingActionButton = {
             FAB(navigateToTaskComposable = navigateToTaskComposable)

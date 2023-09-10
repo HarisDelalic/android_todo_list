@@ -5,10 +5,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.delalic.todolistapp.ui.screens.list.ListScreen
+import com.delalic.todolistapp.ui.viewmodels.SharedViewModel
 import com.delalic.todolistapp.util.Constants
 
 fun NavGraphBuilder.listComposable(
-    navigateToTaskComposable: (taskId: Int) -> Unit
+    navigateToTaskComposable: (taskId: Int) -> Unit,
+    sharedViewModel: SharedViewModel
 ) {
     composable(
         route = Constants.LIST_SCREEN,
@@ -16,6 +18,6 @@ fun NavGraphBuilder.listComposable(
             type =  NavType.StringType
         })
     ) {
-        ListScreen(navigateToTaskComposable = navigateToTaskComposable)
+        ListScreen(navigateToTaskComposable = navigateToTaskComposable, sharedViewModel = sharedViewModel)
     }
 }

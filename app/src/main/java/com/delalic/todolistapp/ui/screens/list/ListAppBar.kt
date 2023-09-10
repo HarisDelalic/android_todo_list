@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,18 +38,43 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.delalic.todolistapp.R
 import com.delalic.todolistapp.components.PriorityItem
 import com.delalic.todolistapp.data.enums.Priority
+import com.delalic.todolistapp.ui.screens.list.enums.SearchAppBarState
+import com.delalic.todolistapp.ui.screens.list.enums.TrailingIconState
 import com.delalic.todolistapp.ui.theme.TOP_APP_BAR_HEIGHT
 import com.delalic.todolistapp.ui.theme.topAppBarBackgroundColor
 import com.delalic.todolistapp.ui.theme.topAppBarContentColor
+import com.delalic.todolistapp.ui.viewmodels.SharedViewModel
 
 @Composable
-fun ListAppBar() {
-//    DefaultListAppBar(
-//        onSearchClicked = {},
-//        onSortClicked = {},
-//        onDeleteAllClicked = {}
-//    )
-    SearchAppBar(text = "search", onTextChange = {}, onCloseClicked = {}, onSearchClicked = {})
+fun ListAppBar(
+    sharedViewModel: SharedViewModel,
+    searchAppBarState: SearchAppBarState,
+    searchTextState: String
+) {
+    when (searchAppBarState) {
+        SearchAppBarState.CLOSED ->
+            DefaultListAppBar(
+                onSearchClicked = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
+                },
+                onSortClicked = {},
+                onDeleteAllClicked = {}
+            )
+
+        else -> {
+            SearchAppBar(
+                text = searchTextState,
+
+                onTextChange = { sharedViewModel.searchTextState.value = it },
+                onCloseClicked = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.CLOSED
+                    sharedViewModel.searchTextState.value = ""
+                },
+                onSearchClicked = { }
+            )
+
+        }
+    }
 }
 
 @Composable
@@ -168,6 +194,8 @@ fun SearchAppBar(
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit
 ) {
+    var trailingIconState by remember { mutableStateOf(TrailingIconState.READY_TO_DELETE) }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -208,7 +236,21 @@ fun SearchAppBar(
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        onCloseClicked()
+                        when(trailingIconState) {
+                            TrailingIconState.READY_TO_DELETE -> {
+                                onTextChange("")
+                                trailingIconState = TrailingIconState.READY_TO_CLOSE
+                            }
+                            TrailingIconState.READY_TO_CLOSE -> {
+                                if(text.isNotEmpty()) {
+                                    onTextChange("")
+                                } else {
+                                    onTextChange("")
+                                    onCloseClicked()
+                                    trailingIconState = TrailingIconState.READY_TO_DELETE
+                                }
+                            }
+                        }
                     },
                 ) {
                     Icon(

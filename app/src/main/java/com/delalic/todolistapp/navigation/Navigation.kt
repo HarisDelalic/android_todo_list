@@ -6,10 +6,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.delalic.todolistapp.navigation.destinations.listComposable
 import com.delalic.todolistapp.navigation.destinations.taskComposable
+import com.delalic.todolistapp.ui.viewmodels.SharedViewModel
 import com.delalic.todolistapp.util.Constants
 
 @Composable
-fun SetupNavigation(navController: NavHostController) {
+fun SetupNavigation(
+    navController: NavHostController,
+    sharedViewModel: SharedViewModel
+) {
 
     val screen = remember(navController) {
         Screens(navController = navController)
@@ -20,7 +24,8 @@ fun SetupNavigation(navController: NavHostController) {
         startDestination = Constants.LIST_SCREEN
     ) {
         listComposable(
-            navigateToTaskComposable = screen.task
+            navigateToTaskComposable = screen.task,
+            sharedViewModel = sharedViewModel
         )
         taskComposable(
             navigateToListComposable = screen.list

@@ -7,6 +7,8 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +25,12 @@ fun ListScreen(navigateToTaskComposable: (taskId: Int) -> Unit, sharedViewModel:
     val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
     val searchTextState: String by sharedViewModel.searchTextState
 
+    LaunchedEffect(key1 = true) {
+        sharedViewModel.getAll()
+    }
+
+    val allTasks by sharedViewModel.allTasks.collectAsState(initial = emptyList())
+
     Scaffold(
         topBar = { ListAppBar(
             sharedViewModel = sharedViewModel,
@@ -30,7 +38,10 @@ fun ListScreen(navigateToTaskComposable: (taskId: Int) -> Unit, sharedViewModel:
             searchTextState = searchTextState
         ) },
         content = {
-            ListContent()
+            ListContent(
+                tasks = allTasks,
+                navigateToTask = navigateToTaskComposable
+            )
         },
         floatingActionButton = {
             FAB(navigateToTaskComposable = navigateToTaskComposable)

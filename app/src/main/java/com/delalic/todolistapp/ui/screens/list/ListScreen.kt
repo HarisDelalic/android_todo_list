@@ -29,7 +29,9 @@ fun ListScreen(navigateToTaskComposable: (taskId: Int) -> Unit, sharedViewModel:
             searchAppBarState = searchAppBarState,
             searchTextState = searchTextState
         ) },
-        content = {},
+        content = {
+            ListContent()
+        },
         floatingActionButton = {
             FAB(navigateToTaskComposable = navigateToTaskComposable)
         }

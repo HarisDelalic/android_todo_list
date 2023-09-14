@@ -34,14 +34,18 @@ import com.delalic.todolistapp.ui.theme.taskItemContentColor
 @Composable
 fun ListContent(tasks: List<ToDoTask>, navigateToTask: (taskId: Int) -> Unit) {
 
-    LazyColumn {
-        items(items = tasks, key = { task ->
-            task.id
-        }) { task: ToDoTask ->
-            TaskItem(
-                toDoTask = task,
-                navigateToTask = navigateToTask
-            )
+    if(tasks.isEmpty()) {
+        EmptyContent()
+    } else {
+        LazyColumn {
+            items(items = tasks, key = { task ->
+                task.id
+            }) { task: ToDoTask ->
+                TaskItem(
+                    toDoTask = task,
+                    navigateToTask = navigateToTask
+                )
+            }
         }
     }
 }

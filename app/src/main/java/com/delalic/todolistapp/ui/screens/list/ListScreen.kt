@@ -29,7 +29,7 @@ fun ListScreen(navigateToTaskComposable: (taskId: Int) -> Unit, sharedViewModel:
         sharedViewModel.getAll()
     }
 
-    val allTasks by sharedViewModel.allTasks.collectAsState(initial = emptyList())
+    val allTasks by sharedViewModel.allTasks.collectAsState()
 
     Scaffold(
         topBar = { ListAppBar(

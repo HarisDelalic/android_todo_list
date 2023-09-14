@@ -30,21 +30,24 @@ import com.delalic.todolistapp.ui.theme.LARGE_PADDING
 import com.delalic.todolistapp.ui.theme.PRIORITY_INDICATOR_SIZE
 import com.delalic.todolistapp.ui.theme.taskItemBackgroundColor
 import com.delalic.todolistapp.ui.theme.taskItemContentColor
+import com.delalic.todolistapp.util.RequestState
 
 @Composable
-fun ListContent(tasks: List<ToDoTask>, navigateToTask: (taskId: Int) -> Unit) {
+fun ListContent(tasks: RequestState<List<ToDoTask>>, navigateToTask: (taskId: Int) -> Unit) {
 
-    if(tasks.isEmpty()) {
-        EmptyContent()
-    } else {
-        LazyColumn {
-            items(items = tasks, key = { task ->
-                task.id
-            }) { task: ToDoTask ->
-                TaskItem(
-                    toDoTask = task,
-                    navigateToTask = navigateToTask
-                )
+    if(tasks is RequestState.Success) {
+        if(tasks.data.isEmpty()) {
+            EmptyContent()
+        } else {
+            LazyColumn {
+                items(items = tasks.data, key = { task ->
+                    task.id
+                }) { task: ToDoTask ->
+                    TaskItem(
+                        toDoTask = task,
+                        navigateToTask = navigateToTask
+                    )
+                }
             }
         }
     }

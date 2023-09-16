@@ -1,5 +1,6 @@
 package com.delalic.todolistapp.navigation.destinations
 
+import android.util.Log
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -15,7 +16,7 @@ fun NavGraphBuilder.taskComposable(
         arguments = listOf(navArgument(name = Constants.TASK_ARGUMENT_KEY) {
             type = NavType.IntType
         })
-    ) {
-
+    ) { navBackStackEntry ->
+        Log.d("taskComposable", navBackStackEntry.arguments!!.get(Constants.TASK_ARGUMENT_KEY).toString())
     }
 }

@@ -21,8 +21,14 @@ import com.delalic.todolistapp.ui.theme.topAppBarBackgroundColor
 import com.delalic.todolistapp.ui.theme.topAppBarContentColor
 
 @Composable
-fun TaskAppBar(navigateToListScreen: (Action) -> Unit) {
-    NewTaskAppBar(navigateToListScreen)
+fun TaskAppBar(navigateToListScreen: (Action) -> Unit, selectedTask: ToDoTask?)
+{
+    if (selectedTask == null) {
+        NewTaskAppBar(navigateToListScreen)
+    }
+    else{
+        ExistingTaskAppBar(selectedTask = selectedTask, navigateToListScreen = navigateToListScreen)
+    }
 }
 
 @Composable

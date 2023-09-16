@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.delalic.todolistapp.navigation.Action
+import com.delalic.todolistapp.ui.screens.task.TaskScreen
 import com.delalic.todolistapp.util.Constants
 
 fun NavGraphBuilder.taskComposable(
@@ -18,5 +19,7 @@ fun NavGraphBuilder.taskComposable(
         })
     ) { navBackStackEntry ->
         Log.d("taskComposable", navBackStackEntry.arguments!!.get(Constants.TASK_ARGUMENT_KEY).toString())
+        
+        TaskScreen(navigateToListScreen = navigateToListComposable)
     }
 }

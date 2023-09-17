@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -59,7 +60,8 @@ fun PriorityDropdown(
                 width = 1.dp,
                 color = MaterialTheme.colors.onSurface.copy(
                     alpha = ContentAlpha.disabled
-                )
+                ),
+                shape = RoundedCornerShape(4.dp)
             )
     ) {
         Canvas(
@@ -86,32 +88,31 @@ fun PriorityDropdown(
                 contentDescription = "Drop-Down Arrow Icon"
             )
         }
-    }
-
-    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }, modifier = Modifier.fillMaxWidth()) {
-        DropdownMenuItem(
-            onClick = {
-                expanded = false
-                onPrioritySelected(Priority.LOW)
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }, modifier = Modifier.fillMaxWidth(fraction = 0.94f)) {
+            DropdownMenuItem(
+                onClick = {
+                    expanded = false
+                    onPrioritySelected(Priority.LOW)
+                }
+            ) {
+                PriorityItem(priority = Priority.LOW)
             }
-        ) {
-            PriorityItem(priority = Priority.LOW)
-        }
-        DropdownMenuItem(
-            onClick = {
-                expanded = false
-                onPrioritySelected(Priority.MEDIUM)
+            DropdownMenuItem(
+                onClick = {
+                    expanded = false
+                    onPrioritySelected(Priority.MEDIUM)
+                }
+            ) {
+                PriorityItem(priority = Priority.MEDIUM)
             }
-        ) {
-            PriorityItem(priority = Priority.MEDIUM)
-        }
-        DropdownMenuItem(
-            onClick = {
-                expanded = false
-                onPrioritySelected(Priority.HIGH)
+            DropdownMenuItem(
+                onClick = {
+                    expanded = false
+                    onPrioritySelected(Priority.HIGH)
+                }
+            ) {
+                PriorityItem(priority = Priority.HIGH)
             }
-        ) {
-            PriorityItem(priority = Priority.HIGH)
         }
     }
 }

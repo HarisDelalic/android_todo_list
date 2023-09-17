@@ -1,9 +1,11 @@
 package com.delalic.todolistapp.ui.viewmodels
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delalic.todolistapp.data.enums.Priority
 import com.delalic.todolistapp.data.models.ToDoTask
 import com.delalic.todolistapp.data.repositories.ToDoRepository
 import com.delalic.todolistapp.ui.screens.list.enums.SearchAppBarState
@@ -26,6 +28,11 @@ class SharedViewModel @Inject constructor(private val toDoRepository: ToDoReposi
     // state: searchTextState
     var searchTextState: MutableState<String> = mutableStateOf("")
         private set
+
+    val taskId: MutableState<Int> = mutableStateOf(0)
+    val taskTitle: MutableState<String> = mutableStateOf("")
+    val taskDescription: MutableState<String> = mutableStateOf("")
+    val taskPriority: MutableState<Priority> = mutableStateOf(Priority.LOW)
 
     private val _allTasks = MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
 
@@ -51,6 +58,20 @@ class SharedViewModel @Inject constructor(private val toDoRepository: ToDoReposi
             toDoRepository.getSelectedTask(taskId).collect {
                 task -> _selectedTask.value = task
             }
+        }
+    }
+
+    fun updateTaskFields(selectedTask: ToDoTask?) {
+        if (selectedTask != null) {
+            taskId.value = selectedTask.id
+            taskTitle.value = selectedTask.title
+            taskDescription.value = selectedTask.description
+            taskPriority.value = selectedTask.priority
+        } else {
+            taskId.value = 0
+            taskTitle.value = ""
+            taskDescription.value = ""
+            taskPriority.value = Priority.LOW
         }
     }
 }

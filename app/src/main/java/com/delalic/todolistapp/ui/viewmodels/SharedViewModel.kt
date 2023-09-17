@@ -1,5 +1,6 @@
 package com.delalic.todolistapp.ui.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,10 +9,12 @@ import androidx.lifecycle.viewModelScope
 import com.delalic.todolistapp.data.enums.Priority
 import com.delalic.todolistapp.data.models.ToDoTask
 import com.delalic.todolistapp.data.repositories.ToDoRepository
+import com.delalic.todolistapp.navigation.Action
 import com.delalic.todolistapp.ui.screens.list.enums.SearchAppBarState
 import com.delalic.todolistapp.util.Constants.MAX_TITLE_LENGTH
 import com.delalic.todolistapp.util.RequestState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -34,6 +37,8 @@ class SharedViewModel @Inject constructor(private val toDoRepository: ToDoReposi
     val taskTitle: MutableState<String> = mutableStateOf("")
     val taskDescription: MutableState<String> = mutableStateOf("")
     val taskPriority: MutableState<Priority> = mutableStateOf(Priority.LOW)
+
+    val action: MutableState<Action> = mutableStateOf(Action.NO_ACTION)
 
     private val _allTasks = MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
 
@@ -84,5 +89,31 @@ class SharedViewModel @Inject constructor(private val toDoRepository: ToDoReposi
 
     fun validateFields(): Boolean {
         return taskTitle.value.isNotEmpty() && taskDescription.value.isNotEmpty()
+    }
+
+    fun handleAction(action: Action) {
+        when(action) {
+            Action.ADD -> {
+                Log.d("desc", action.toString())
+                addTask()
+            }
+            Action.UPDATE -> {
+
+            }
+//            TODO: add other actions
+        }
+        this.action.value = Action.NO_ACTION
+    }
+
+    private fun addTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val taskToAdd: ToDoTask = ToDoTask(
+                title = taskTitle.value,
+                description = taskDescription.value,
+                priority = taskPriority.value
+            )
+
+            toDoRepository.addTask(todoTask = taskToAdd)
+        }
     }
 }

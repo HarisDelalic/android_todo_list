@@ -6,7 +6,7 @@ import com.delalic.todolistapp.util.Constants
 class Screens(navController: NavHostController) {
 
     val list: (Action) -> Unit = { action ->
-        navController.navigate("list/$action.name") {
+        navController.navigate("list/$action") {
             popUpTo(Constants.LIST_SCREEN) { inclusive = true }
         }
     }

@@ -91,7 +91,7 @@ class SharedViewModel @Inject constructor(private val toDoRepository: ToDoReposi
         return taskTitle.value.isNotEmpty() && taskDescription.value.isNotEmpty()
     }
 
-    fun handleAction(action: Action) {
+    fun handleDatabaseAction(action: Action) {
         when(action) {
             Action.ADD -> {
                 Log.d("desc", action.toString())

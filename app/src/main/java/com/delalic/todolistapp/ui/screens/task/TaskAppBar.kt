@@ -132,7 +132,7 @@ fun UpdateTaskIcon(
 fun DeleteTaskIcon(
     onDeleteClicked: (Action) -> Unit
 ) {
-    IconButton(onClick = { onDeleteClicked(Action.UPDATE) }) {
+    IconButton(onClick = { onDeleteClicked(Action.DELETE) }) {
         Icon(
             imageVector = Icons.Filled.Delete,
             contentDescription = "Delete Icon",

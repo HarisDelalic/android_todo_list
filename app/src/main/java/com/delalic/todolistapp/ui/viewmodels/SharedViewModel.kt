@@ -98,7 +98,10 @@ class SharedViewModel @Inject constructor(private val toDoRepository: ToDoReposi
                 addTask()
             }
             Action.UPDATE -> {
-
+                updateTask()
+            }
+            Action.DELETE -> {
+                deleteTask()
             }
 //            TODO: add other actions
         }
@@ -114,6 +117,33 @@ class SharedViewModel @Inject constructor(private val toDoRepository: ToDoReposi
             )
 
             toDoRepository.addTask(todoTask = taskToAdd)
+        }
+    }
+
+    private fun updateTask() {
+        viewModelScope.launch {
+            val taskToUpdate: ToDoTask = ToDoTask(
+                id = taskId.value,
+                title = taskTitle.value,
+                description = taskDescription.value,
+                priority = taskPriority.value
+            )
+
+            toDoRepository.updateTask(taskToUpdate)
+        }
+    }
+
+    private fun deleteTask() {
+        viewModelScope.launch {
+//            TODO: why whole task, id should be enough on delete
+            val taskToDelete: ToDoTask = ToDoTask(
+                id = taskId.value,
+                title = taskTitle.value,
+                description = taskDescription.value,
+                priority = taskPriority.value
+            )
+
+            toDoRepository.deleteTask(taskToDelete)
         }
     }
 }

@@ -26,7 +26,7 @@ fun TaskScreen(
     Scaffold(
         topBar = {
             TaskAppBar(navigateToListScreen = { action: Action ->
-                                              if (Action.NO_ACTION == action) {
+                                              if (Action.NO_ACTION == action || Action.DELETE == action) {
                                                   navigateToListScreen(action)
                                               } else if (Action.ADD == action || Action.UPDATE == action) {
                                                   if (sharedViewModel.validateFields()) {

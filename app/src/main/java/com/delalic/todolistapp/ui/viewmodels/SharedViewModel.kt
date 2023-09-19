@@ -103,6 +103,9 @@ class SharedViewModel @Inject constructor(private val toDoRepository: ToDoReposi
             Action.DELETE -> {
                 deleteTask()
             }
+            Action.UNDO -> {
+                addTask()
+            }
 //            TODO: add other actions
         }
         this.action.value = Action.NO_ACTION

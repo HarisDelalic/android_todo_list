@@ -12,8 +12,15 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.delalic.todolistapp.R
+import com.delalic.todolistapp.components.DisplayAlertDialog
 import com.delalic.todolistapp.data.enums.Priority
 import com.delalic.todolistapp.data.models.ToDoTask
 import com.delalic.todolistapp.navigation.Action
@@ -96,10 +103,34 @@ fun ExistingTaskAppBar(
         },
         backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor,
         actions = {
-            UpdateTaskIcon(onUpdateClicked = navigateToListScreen)
-            DeleteTaskIcon(onDeleteClicked = navigateToListScreen)
+            HandleExistingTaskActions(
+                selectedTask = selectedTask,
+                navigateToListScreen = navigateToListScreen)
         }
     )
+}
+
+
+@Composable
+fun HandleExistingTaskActions(
+    selectedTask: ToDoTask,
+    navigateToListScreen: (Action) -> Unit
+) {
+
+    var openDialog by remember { mutableStateOf(false) }
+
+    DisplayAlertDialog(
+        title = "Remove ${selectedTask.title}?",
+        message = "Are you sure you want to remove ${selectedTask.title}?",
+        openDialog = openDialog,
+        onDismissClicked = { openDialog = false },
+        onConfirmClicked = { navigateToListScreen(Action.DELETE) }
+    )
+
+    UpdateTaskIcon(onUpdateClicked = navigateToListScreen)
+    DeleteTaskIcon(onDeleteClicked = {
+        openDialog = true
+    })
 }
 
 @Composable
@@ -130,9 +161,9 @@ fun UpdateTaskIcon(
 
 @Composable
 fun DeleteTaskIcon(
-    onDeleteClicked: (Action) -> Unit
+    onDeleteClicked: () -> Unit
 ) {
-    IconButton(onClick = { onDeleteClicked(Action.DELETE) }) {
+    IconButton(onClick = { onDeleteClicked()}) {
         Icon(
             imageVector = Icons.Filled.Delete,
             contentDescription = "Delete Icon",

@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.delalic.todolistapp.R
 import com.delalic.todolistapp.components.PriorityItem
 import com.delalic.todolistapp.data.enums.Priority
+import com.delalic.todolistapp.navigation.Action
 import com.delalic.todolistapp.ui.screens.list.enums.SearchAppBarState
 import com.delalic.todolistapp.ui.screens.list.enums.TrailingIconState
 import com.delalic.todolistapp.ui.theme.TOP_APP_BAR_HEIGHT
@@ -58,7 +59,7 @@ fun ListAppBar(
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                 },
                 onSortClicked = {},
-                onDeleteAllClicked = {}
+                onDeleteAllClicked = { sharedViewModel.action.value = Action.DELETE_ALL}
             )
 
         else -> {

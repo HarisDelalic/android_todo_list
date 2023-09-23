@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.delalic.todolistapp.data.enums.Priority
 import com.delalic.todolistapp.data.models.ToDoTask
+import com.delalic.todolistapp.ui.screens.list.enums.SearchAppBarState
 import com.delalic.todolistapp.ui.theme.LARGE_PADDING
 import com.delalic.todolistapp.ui.theme.PRIORITY_INDICATOR_SIZE
 import com.delalic.todolistapp.ui.theme.taskItemBackgroundColor
@@ -33,8 +34,24 @@ import com.delalic.todolistapp.ui.theme.taskItemContentColor
 import com.delalic.todolistapp.util.RequestState
 
 @Composable
-fun ListContent(tasks: RequestState<List<ToDoTask>>, navigateToTask: (taskId: Int) -> Unit) {
+fun ListContent(tasks: RequestState<List<ToDoTask>>,
+                searchedTasks: RequestState<List<ToDoTask>>,
+                searchAppBarState: SearchAppBarState,
+                navigateToTask: (taskId: Int) -> Unit) {
 
+    if (searchAppBarState == SearchAppBarState.TRIGGERED) {
+        handleTasks(tasks = searchedTasks, navigateToTask = navigateToTask)
+    } else {
+        handleTasks(tasks = tasks, navigateToTask = navigateToTask)
+    }
+}
+
+@Composable
+fun handleTasks(
+//    could be searchedTasks or allTasks
+    tasks: RequestState<List<ToDoTask>>,
+    navigateToTask: (taskId: Int) -> Unit
+) {
     if(tasks is RequestState.Success) {
         if(tasks.data.isEmpty()) {
             EmptyContent()

@@ -21,15 +21,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.delalic.todolistapp.R
+import com.delalic.todolistapp.data.models.ToDoTask
 import com.delalic.todolistapp.navigation.Action
 import com.delalic.todolistapp.ui.screens.list.enums.SearchAppBarState
 import com.delalic.todolistapp.ui.viewmodels.SharedViewModel
+import com.delalic.todolistapp.util.RequestState
 import kotlinx.coroutines.launch
 
 @Composable
 fun ListScreen(navigateToTaskComposable: (taskId: Int) -> Unit, sharedViewModel: SharedViewModel) {
     val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
     val searchTextState: String by sharedViewModel.searchTextState
+
+    val allTasks by sharedViewModel.allTasks.collectAsState()
+    val searchedTasks: RequestState<List<ToDoTask>> by sharedViewModel.searchedTasks.collectAsState()
 
     val action by sharedViewModel.action
 
@@ -49,8 +54,6 @@ fun ListScreen(navigateToTaskComposable: (taskId: Int) -> Unit, sharedViewModel:
         sharedViewModel.getAll()
     }
 
-    val allTasks by sharedViewModel.allTasks.collectAsState()
-
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { ListAppBar(
@@ -61,6 +64,8 @@ fun ListScreen(navigateToTaskComposable: (taskId: Int) -> Unit, sharedViewModel:
         content = {
             ListContent(
                 tasks = allTasks,
+                searchedTasks = searchedTasks,
+                searchAppBarState = searchAppBarState,
                 navigateToTask = navigateToTaskComposable
             )
         },

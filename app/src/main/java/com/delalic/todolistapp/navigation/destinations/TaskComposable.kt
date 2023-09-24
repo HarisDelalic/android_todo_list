@@ -25,6 +25,9 @@ fun NavGraphBuilder.taskComposable(
     ) { navBackStackEntry ->
         val taskId = navBackStackEntry.arguments!!.get(Constants.TASK_ARGUMENT_KEY)
 
+        LaunchedEffect(key1 = taskId) {
+            sharedViewModel.getSelectedTask(taskId = Integer.parseInt(taskId.toString()))
+        }
         sharedViewModel.getSelectedTask(taskId = Integer.parseInt(taskId.toString()))
 
         val selectedTask by sharedViewModel.selectedTask.collectAsState()

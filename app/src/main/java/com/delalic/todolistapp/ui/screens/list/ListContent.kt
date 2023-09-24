@@ -37,34 +37,63 @@ import com.delalic.todolistapp.util.RequestState
 fun ListContent(tasks: RequestState<List<ToDoTask>>,
                 searchedTasks: RequestState<List<ToDoTask>>,
                 searchAppBarState: SearchAppBarState,
-                navigateToTask: (taskId: Int) -> Unit) {
+                lowPriorityTasks: List<ToDoTask>,
+                highPriorityTasks: List<ToDoTask>,
+                sortState: RequestState<Priority>,
+                navigateToTaskScreen: (taskId: Int) -> Unit) {
 
-    if (searchAppBarState == SearchAppBarState.TRIGGERED) {
-        handleTasks(tasks = searchedTasks, navigateToTask = navigateToTask)
-    } else {
-        handleTasks(tasks = tasks, navigateToTask = navigateToTask)
+
+    if (sortState is RequestState.Success) {
+        when {
+            searchAppBarState == SearchAppBarState.TRIGGERED -> {
+                if (searchedTasks is RequestState.Success) {
+                    handleTasks(
+                        tasks = searchedTasks.data,
+                        navigateToTaskScreen = navigateToTaskScreen
+                    )
+                }
+            }
+            sortState.data == Priority.NONE -> {
+                if (tasks is RequestState.Success) {
+                    handleTasks(
+                        tasks = tasks.data,
+                        navigateToTaskScreen = navigateToTaskScreen
+                    )
+                }
+            }
+            sortState.data == Priority.LOW -> {
+                handleTasks(
+                    tasks = lowPriorityTasks,
+                    navigateToTaskScreen = navigateToTaskScreen
+                )
+            }
+            sortState.data == Priority.HIGH -> {
+                handleTasks(
+                    tasks = highPriorityTasks,
+                    navigateToTaskScreen = navigateToTaskScreen
+                )
+            }
+        }
     }
 }
 
 @Composable
 fun handleTasks(
 //    could be searchedTasks or allTasks
-    tasks: RequestState<List<ToDoTask>>,
-    navigateToTask: (taskId: Int) -> Unit
+    tasks: List<ToDoTask>,
+    navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    if(tasks is RequestState.Success) {
-        if(tasks.data.isEmpty()) {
-            EmptyContent()
-        } else {
-            LazyColumn {
-                items(items = tasks.data, key = { task ->
-                    task.id
-                }) { task: ToDoTask ->
-                    TaskItem(
-                        toDoTask = task,
-                        navigateToTask = navigateToTask
-                    )
-                }
+    if (tasks.isEmpty()) {
+        EmptyContent()
+    } else {
+        LazyColumn {
+            items(items = tasks, key = { task ->
+                task.id
+            }) { task: ToDoTask ->
+                TaskItem(
+                    toDoTask = task,
+                    navigateToTaskScreen = navigateToTaskScreen
+                )
             }
         }
     }
@@ -74,13 +103,13 @@ fun handleTasks(
 @Composable
 fun TaskItem(
     toDoTask: ToDoTask,
-    navigateToTask: (taskId: Int) -> Unit
+    navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RectangleShape,
         elevation = 4.dp,
-        onClick = { navigateToTask(toDoTask.id) },
+        onClick = { navigateToTaskScreen(toDoTask.id) },
         color = MaterialTheme.colors.taskItemBackgroundColor
     )
     {
@@ -133,6 +162,6 @@ fun TaskItem(
 fun TaskItemPreview() {
     TaskItem(
         toDoTask = ToDoTask(1, "Title", "description", Priority.HIGH),
-        navigateToTask = {}
+        navigateToTaskScreen = {}
     )
 }

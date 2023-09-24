@@ -25,17 +25,18 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PRE
 class DataStoreRepository @Inject constructor(
     @ApplicationContext private val context: Context
 ){
-//    No need for this
-//    private object PreferencesKeys {
-//        val sortKey = stringPreferencesKey(name = PREFERENCE_KEY)
-//    }
+    private object PreferencesKeys {
+        val sortKey = stringPreferencesKey(name = PREFERENCE_KEY)
+    }
 
     private val dataStore = context.dataStore
 
     suspend fun persistSortKey(priority: Priority) {
-        dataStore.edit { preferences -> {
-            preferences[stringPreferencesKey(name = PREFERENCE_KEY)] = priority.name
-        } }
+        dataStore.edit { preferences ->
+            run {
+                preferences[PreferencesKeys.sortKey] = priority.name
+            }
+        }
     }
 
     val readSortState: Flow<String> = dataStore.data
@@ -47,7 +48,7 @@ class DataStoreRepository @Inject constructor(
             }
         }
         .map { preferences ->
-            val sortState = preferences[stringPreferencesKey(name = PREFERENCE_KEY)] ?: Priority.NONE.name
+            val sortState = preferences[PreferencesKeys.sortKey] ?: Priority.NONE.name
             sortState
         }
 }

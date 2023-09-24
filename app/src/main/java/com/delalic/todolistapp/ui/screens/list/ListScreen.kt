@@ -36,6 +36,10 @@ fun ListScreen(navigateToTaskComposable: (taskId: Int) -> Unit, sharedViewModel:
     val allTasks by sharedViewModel.allTasks.collectAsState()
     val searchedTasks: RequestState<List<ToDoTask>> by sharedViewModel.searchedTasks.collectAsState()
 
+    val sortState by sharedViewModel.sortState.collectAsState()
+    val lowPriorityTasks by sharedViewModel.lowPriorityTasks.collectAsState()
+    val highPriorityTasks by sharedViewModel.highPriorityTasks.collectAsState()
+
     val action by sharedViewModel.action
 
     val scaffoldState = rememberScaffoldState();
@@ -52,6 +56,7 @@ fun ListScreen(navigateToTaskComposable: (taskId: Int) -> Unit, sharedViewModel:
 
     LaunchedEffect(key1 = true) {
         sharedViewModel.getAll()
+        sharedViewModel.readSortState()
     }
 
     Scaffold(
@@ -65,8 +70,11 @@ fun ListScreen(navigateToTaskComposable: (taskId: Int) -> Unit, sharedViewModel:
             ListContent(
                 tasks = allTasks,
                 searchedTasks = searchedTasks,
+                lowPriorityTasks = lowPriorityTasks,
+                highPriorityTasks = highPriorityTasks,
+                sortState = sortState,
                 searchAppBarState = searchAppBarState,
-                navigateToTask = navigateToTaskComposable
+                navigateToTaskScreen = navigateToTaskComposable
             )
         },
         floatingActionButton = {

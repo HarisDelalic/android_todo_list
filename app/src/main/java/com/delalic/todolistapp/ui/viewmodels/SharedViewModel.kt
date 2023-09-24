@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delalic.todolistapp.data.enums.Priority
 import com.delalic.todolistapp.data.models.ToDoTask
+import com.delalic.todolistapp.data.repositories.DataStoreRepository
 import com.delalic.todolistapp.data.repositories.ToDoRepository
 import com.delalic.todolistapp.navigation.Action
 import com.delalic.todolistapp.ui.screens.list.enums.SearchAppBarState
@@ -22,7 +23,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SharedViewModel @Inject constructor(private val toDoRepository: ToDoRepository): ViewModel() {
+class SharedViewModel @Inject constructor(
+    private val toDoRepository: ToDoRepository,
+    private val dataStoreRepository: DataStoreRepository): ViewModel() {
 
     // state: searchAppBarState
     var searchAppBarState: MutableState<SearchAppBarState> =

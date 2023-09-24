@@ -11,4 +11,9 @@ object Constants {
     const val TASK_ARGUMENT_KEY = "taskId"
 
     const val MAX_TITLE_LENGTH = 20
+
+    //    preference_name references to whole repository, and inside it there is sorting preference saved in a map
+    //    e.g. getPreferences(PREFERENCE_NAME)[PREFERENCE_KEY] = some_priority
+    const val PREFERENCE_NAME = "todo_preferences"
+    const val PREFERENCE_KEY = "sort_state"
 }
